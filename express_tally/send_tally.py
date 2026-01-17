@@ -8,11 +8,11 @@ def customer():
     payload = json.loads(frappe.request.data)
     customers = frappe.db.get_all(
         'Customer',
-        fields=['name', 'customer_name', 'company', 'customer_primary_address', 'gst_category', 'modified', 'tax_id', 'email_id', 'mobile_no','pan', 'first_name', 'is_synced'],
+        fields=['name', 'customer_name', 'company', 'customer_primary_address', 'gst_category', 'modified', 'tax_id', 'email_id', 'mobile_no','pan', 'first_name', 'custom_is_tally_synced'],
         filters={ 
             # 'modified' : ['>', payload['date']],
             'company': payload['company'],
-            'is_synced': ['!=', 'Yes']
+            'custom_is_tally_synced': ['!=', 'Yes']
             },
         limit=100
         )
@@ -36,11 +36,11 @@ def supplier():
     payload = json.loads(frappe.request.data)
     suppliers = frappe.db.get_all(
         'Supplier',
-        fields=['name', 'supplier_name', 'company', 'gst_category', 'modified', 'is_synced'],
+        fields=['name', 'supplier_name', 'company', 'gst_category', 'modified', 'custom_is_tally_synced'],
         filters={ 
             # 'modified' : ['>', payload['date']],
             'company': payload['company'],
-            'is_synced': ['!=', 'Yes']
+            'custom_is_tally_synced': ['!=', 'Yes']
             },
         limit=100
         )
@@ -89,7 +89,7 @@ def purchase():
             # 'modified' : ['>', payload['date']],
             'company': payload['company'],
             'docstatus': 1,
-            'is_synced': ['!=', 'Yes']
+            'custom_is_tally_synced': ['!=', 'Yes']
             },
         limit=100
         )
@@ -188,8 +188,8 @@ def customer_update():
             doctype,
             doc['docname'],
             {
-                "is_synced": 'Yes',
-                "sync_message": "Success"
+                "custom_is_tally_synced": 'Yes',
+                "custom_sync_message": "Success"
             }
         )
 
@@ -204,8 +204,8 @@ def update_tally_flag(doc, method):
             doc.doctype,
             doc.name,
             {
-                "is_synced": 'No',
-                "sync_message": ""
+                "custom_is_tally_synced": 'No',
+                "custom_sync_message": ""
             }
         )
 

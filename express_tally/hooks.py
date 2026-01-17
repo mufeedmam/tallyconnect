@@ -178,7 +178,7 @@ user_data_fields = [
 custom_fields = {
 	"Customer": [
 		{
-			"fieldname": "is_synced",
+			"fieldname": "custom_is_tally_synced",
 			"label": "Is Tally Synced",
 			"fieldtype": "Select",
 			"options": "No\nYes",
@@ -187,16 +187,16 @@ custom_fields = {
 			"read_only": 1
 		},
 		{
-			"fieldname": "sync_message",
+			"fieldname": "custom_sync_message",
 			"label": "Tally Sync Message",
 			"fieldtype": "Data",
-			"insert_after": "is_synced",
+			"insert_after": "custom_is_tally_synced",
 			"read_only": 1
 		}
 	],
 	"Supplier": [
 		{
-			"fieldname": "is_synced",
+			"fieldname": "custom_is_tally_synced",
 			"label": "Is Tally Synced",
 			"fieldtype": "Select",
 			"options": "No\nYes",
@@ -205,16 +205,16 @@ custom_fields = {
 			"read_only": 1
 		},
 		{
-			"fieldname": "sync_message",
+			"fieldname": "custom_sync_message",
 			"label": "Tally Sync Message",
 			"fieldtype": "Data",
-			"insert_after": "is_synced",
+			"insert_after": "custom_is_tally_synced",
 			"read_only": 1
 		}
 	],
 	"Sales Invoice": [
 		{
-			"fieldname": "is_synced",
+			"fieldname": "custom_is_tally_synced",
 			"label": "Is Tally Synced",
 			"fieldtype": "Select",
 			"options": "No\nYes",
@@ -223,16 +223,16 @@ custom_fields = {
 			"read_only": 1
 		},
 		{
-			"fieldname": "sync_message",
+			"fieldname": "custom_sync_message",
 			"label": "Tally Sync Message",
 			"fieldtype": "Data",
-			"insert_after": "is_synced",
+			"insert_after": "custom_is_tally_synced",
 			"read_only": 1
 		}
 	],
 	"Purchase Invoice": [
 		{
-			"fieldname": "is_synced",
+			"fieldname": "custom_is_tally_synced",
 			"label": "Is Tally Synced",
 			"fieldtype": "Select",
 			"options": "No\nYes",
@@ -241,16 +241,16 @@ custom_fields = {
 			"read_only": 1
 		},
 		{
-			"fieldname": "sync_message",
+			"fieldname": "custom_sync_message",
 			"label": "Tally Sync Message",
 			"fieldtype": "Data",
-			"insert_after": "is_synced",
+			"insert_after": "custom_is_tally_synced",
 			"read_only": 1
 		}
 	],
 	"Payment Entry": [
 		{
-			"fieldname": "is_synced",
+			"fieldname": "custom_is_tally_synced",
 			"label": "Is Tally Synced",
 			"fieldtype": "Select",
 			"options": "No\nYes",
@@ -259,10 +259,10 @@ custom_fields = {
 			"read_only": 1
 		},
 		{
-			"fieldname": "sync_message",
+			"fieldname": "custom_sync_message",
 			"label": "Tally Sync Message",
 			"fieldtype": "Data",
-			"insert_after": "is_synced",
+			"insert_after": "custom_is_tally_synced",
 			"read_only": 1
 		}
 	]
