@@ -173,4 +173,97 @@ user_data_fields = [
 # 	"express_tally.auth.validate"
 # ]
 
-fixtures = ['Custom Field']
+# fixtures = ['Custom Field']
+
+custom_fields = {
+	"Customer": [
+		{
+			"fieldname": "is_synced",
+			"label": "Is Tally Synced",
+			"fieldtype": "Select",
+			"options": "No\nYes",
+			"default": "No",
+			"insert_after": "customer_name",
+			"read_only": 1
+		},
+		{
+			"fieldname": "sync_message",
+			"label": "Tally Sync Message",
+			"fieldtype": "Data",
+			"insert_after": "is_synced",
+			"read_only": 1
+		}
+	],
+	"Supplier": [
+		{
+			"fieldname": "is_synced",
+			"label": "Is Tally Synced",
+			"fieldtype": "Select",
+			"options": "No\nYes",
+			"default": "No",
+			"insert_after": "supplier_name",
+			"read_only": 1
+		},
+		{
+			"fieldname": "sync_message",
+			"label": "Tally Sync Message",
+			"fieldtype": "Data",
+			"insert_after": "is_synced",
+			"read_only": 1
+		}
+	],
+	"Sales Invoice": [
+		{
+			"fieldname": "is_synced",
+			"label": "Is Tally Synced",
+			"fieldtype": "Select",
+			"options": "No\nYes",
+			"default": "No",
+			"insert_after": "customer_name",
+			"read_only": 1
+		},
+		{
+			"fieldname": "sync_message",
+			"label": "Tally Sync Message",
+			"fieldtype": "Data",
+			"insert_after": "is_synced",
+			"read_only": 1
+		}
+	],
+	"Purchase Invoice": [
+		{
+			"fieldname": "is_synced",
+			"label": "Is Tally Synced",
+			"fieldtype": "Select",
+			"options": "No\nYes",
+			"default": "No",
+			"insert_after": "supplier_name",
+			"read_only": 1
+		},
+		{
+			"fieldname": "sync_message",
+			"label": "Tally Sync Message",
+			"fieldtype": "Data",
+			"insert_after": "is_synced",
+			"read_only": 1
+		}
+	],
+	"Payment Entry": [
+		{
+			"fieldname": "is_synced",
+			"label": "Is Tally Synced",
+			"fieldtype": "Select",
+			"options": "No\nYes",
+			"default": "No",
+			"insert_after": "party_name",
+			"read_only": 1
+		},
+		{
+			"fieldname": "sync_message",
+			"label": "Tally Sync Message",
+			"fieldtype": "Data",
+			"insert_after": "is_synced",
+			"read_only": 1
+		}
+	]
+}
