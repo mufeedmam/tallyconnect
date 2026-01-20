@@ -240,12 +240,12 @@ def customer_opening():
                     # "price_list_currency": "INR",
                     "posting_date": bill['posting_date'],
                     "due_date": bill['due_date'],
-                    "debit_to": bill['debit_to'], #"Test 3 Customer - ETPL",
+                    "debit_to": bill['debit_to'], #"Test 3 Customer - Abbr",
                     # "party_account_currency": "INR",
                     "is_opening": 'Yes',
                     "is_return": bill['is_return'],
                     "grand_total": bill['amount'],
-                    "against_income_account": bill['against_income_account'],#"Temporary Opening - ETPL",
+                    "against_income_account": bill['against_income_account'],#"Temporary Opening - Abbr",
                     "disable_rounded_total": 1,
                     "doctype": "Sales Invoice",
                     "items": [
@@ -312,12 +312,12 @@ def supplier_opening():
                     # "price_list_currency": "INR",
                     "posting_date": bill['posting_date'],
                     "due_date": bill['due_date'],
-                    "credit_to": bill['credit_to'], #"Test 3 Customer - ETPL",
+                    "credit_to": bill['credit_to'], #"Test 3 Customer - Abbr",
                     # "party_account_currency": "INR",
                     "is_opening": 'Yes',
                     "is_return": bill['is_return'],
                     "grand_total": bill['amount'],
-                    "against_expense_account": bill['against_expense_account'],#"Temporary Opening - ETPL",
+                    "against_expense_account": bill['against_expense_account'],#"Temporary Opening - Abbr",
                     "disable_rounded_total": 1,
                     "doctype": "Purchase Invoice",
                     "items": [
@@ -438,139 +438,132 @@ def account():
 
 
 def create_account(customer):
-    try:
-        doctype = customer['doctype']
-        cus_name = customer['customer_name'] if doctype == 'Customer' else customer['supplier_name']
-        parent_account = 'Accounts Receivable - ETPL' if doctype == 'Customer' else 'Accounts Payable - ETPL'
-        account_type = 'Receivable' if doctype == 'Customer' else 'Payable'
+    doctype = customer['doctype']
+    cus_name = customer['customer_name'] if doctype == 'Customer' else customer['supplier_name']
 
-        req = {
-            "company": customer['company'],
-            "account_name": cus_name,
-            "account_currency": "INR",
-            "doctype": "Account",
-            "parent_account": parent_account,
-            "account_type": account_type
-        }
+    abbr = frappe.get_value("Company", customer['company'], "abbr")
+    if not abbr:
+         frappe.throw("Company Abbreviation not found")
 
-        # print(req)
-        doc = frappe.get_doc(req)
-        doc.insert()
+    parent_account = 'Accounts Receivable - {}'.format(abbr) if doctype == 'Customer' else 'Accounts Payable - {}'.format(abbr)
+    account_type = 'Receivable' if doctype == 'Customer' else 'Payable'
 
-        # return {'name': customer['customer_name'], 'tally_object': 'Ledger_Contact', 'message': 'Success'}
-        print('Success- Account')
-    except Exception as e:
-        print(str(e))
-        # return {'name': customer['customer_name'], 'tally_object': 'Ledger_Contact', 'message': str(e)}
+    req = {
+        "company": customer['company'],
+        "account_name": cus_name,
+        "account_currency": "INR",
+        "doctype": "Account",
+        "parent_account": parent_account,
+        "account_type": account_type
+    }
+
+    # print(req)
+    doc = frappe.get_doc(req)
+    doc.insert()
+
+    # return {'name': customer['customer_name'], 'tally_object': 'Ledger_Contact', 'message': 'Success'}
+    print('Success- Account')
 
 
 def create_contact(customer):
-    try:
-        doctype = customer['doctype']
-        cus_name = customer['customer_code'] if doctype == 'Customer' else customer['supplier_name']
+    doctype = customer['doctype']
+    cus_name = customer['customer_code'] if doctype == 'Customer' else customer['supplier_name']
 
-        req = {
-            "name": customer['ledgercontact'],
-            "first_name": customer['ledgercontact'],
-            "email_id": customer['email']  if 'email' in customer else "",
-            "status": "Passive",
-            "phone": customer['ledgermobile'] if 'ledgermobile' in customer else "",
-            "mobile_no": customer['ledgermobile'] if 'ledgermobile' in customer else "",
-            "is_primary_contact": 1,
-            "is_billing_contact": 1,
-            "doctype": "Contact",
-            "email_ids": [
-                {
-                    "parent": customer['ledgercontact'],
-                    "parentfield": "email_ids",
-                    "parenttype": "Contact",
-                    "email_id": customer['email'] if 'email' in customer else "a@b.com",
-                    "is_primary": 1,
-                    "doctype": "Contact Email"
-                }
-            ],
-            "phone_nos": [
-                {
-                    "parent": customer['ledgercontact'],
-                    "parentfield": "phone_nos",
-                    "parenttype": "Contact",
-                    "phone": customer['ledgermobile'] if 'ledgermobile' in customer else "9999999999",
-                    "is_primary_phone": 1,
-                    "is_primary_mobile_no": 1,
-                    "doctype": "Contact Phone"
-                }
-            ],
-            "links": [
-                {
-                    "parent": customer['ledgercontact'],
-                    "parentfield": "links",
-                    "parenttype": "Contact",
-                    "link_doctype": doctype,
-                    "link_name": cus_name,
-                    "link_title": cus_name,
-                    "doctype": "Dynamic Link"
-                }
-            ],
-        }
+    req = {
+        "name": customer['ledgercontact'],
+        "first_name": customer['ledgercontact'],
+        "email_id": customer['email']  if 'email' in customer else "",
+        "status": "Passive",
+        "phone": customer['ledgermobile'] if 'ledgermobile' in customer else "",
+        "mobile_no": customer['ledgermobile'] if 'ledgermobile' in customer else "",
+        "is_primary_contact": 1,
+        "is_billing_contact": 1,
+        "doctype": "Contact",
+        "email_ids": [
+            {
+                "parent": customer['ledgercontact'],
+                "parentfield": "email_ids",
+                "parenttype": "Contact",
+                "email_id": customer['email'] if 'email' in customer else "a@b.com",
+                "is_primary": 1,
+                "doctype": "Contact Email"
+            }
+        ],
+        "phone_nos": [
+            {
+                "parent": customer['ledgercontact'],
+                "parentfield": "phone_nos",
+                "parenttype": "Contact",
+                "phone": customer['ledgermobile'] if 'ledgermobile' in customer else "9999999999",
+                "is_primary_phone": 1,
+                "is_primary_mobile_no": 1,
+                "doctype": "Contact Phone"
+            }
+        ],
+        "links": [
+            {
+                "parent": customer['ledgercontact'],
+                "parentfield": "links",
+                "parenttype": "Contact",
+                "link_doctype": doctype,
+                "link_name": cus_name,
+                "link_title": cus_name,
+                "doctype": "Dynamic Link"
+            }
+        ],
+    }
 
-        # print(req)
-        doc = frappe.get_doc(req)
-        doc.insert()
+    # print(req)
+    doc = frappe.get_doc(req)
+    doc.insert()
 
-        # return {'name': customer['customer_name'], 'tally_object': 'Ledger_Contact', 'message': 'Success'}
-        print('Success- Contact')
-    except Exception as e:
-        print(str(e))
-        # return {'name': customer['customer_name'], 'tally_object': 'Ledger_Contact', 'message': str(e)}
+    # return {'name': customer['customer_name'], 'tally_object': 'Ledger_Contact', 'message': 'Success'}
+    print('Success- Contact')
 
 
 def create_address(customer):
-    try:
-        address1 = customer['address1'] if 'address1' in customer else ""
-        address2 = customer['address2'] if 'address2' in customer else ""
-        address3 = customer['address3'] if 'address3' in customer else ""
-        address4 = customer['address4'] if 'address4' in customer else ""
-        doctype = customer['doctype']
-        cus_name = customer['customer_code'] if doctype == 'Customer' else customer['supplier_name']
+    address1 = customer['address1'] if 'address1' in customer else ""
+    address2 = customer['address2'] if 'address2' in customer else ""
+    address3 = customer['address3'] if 'address3' in customer else ""
+    address4 = customer['address4'] if 'address4' in customer else ""
+    doctype = customer['doctype']
+    cus_name = customer['customer_code'] if doctype == 'Customer' else customer['supplier_name']
 
-        req = {
-            "name": cus_name+"-Billing",
-            "address_title": cus_name,
-            "address_type": "Billing",
-            "address_line1": address1 + " " + address2,
-            "address_line2": address3 + " " + address4,
-            "city": customer['city'] if 'city' in customer else "",
-            "state": customer['state'] if 'state' in customer else "",
-            "country": customer['country'] if 'country' in customer else "",
-            "pincode": customer['pincode'] if 'pincode' in customer else "",
-            # "phone": customer['customer_code'],
-            "gstin": customer['partygstin'] if 'partygstin' in customer else "",
-            "gst_state": customer['state'] if 'state' in customer else "",
-            "gst_state_number": customer['state_code'] if 'state_code' in customer else "",
-            "tax_category": customer['tax_category'] if 'tax_category' in customer else "",
-            "is_primary_address": 1,
-            "is_shipping_address": 1,
-            "doctype": "Address",
-            "links": [
-                {
-                    "parent": cus_name+"-Billing",
-                    "parentfield": "links",
-                    "parenttype": "Address",
-                    "link_doctype": doctype,
-                    "link_name": cus_name,
-                    "link_title": cus_name,
-                    "doctype": "Dynamic Link"
-                }
-            ]
-        }
-        # print(req)
-        doc = frappe.get_doc(req)
-        doc.insert()
+    req = {
+        "name": cus_name+"-Billing",
+        "address_title": cus_name,
+        "address_type": "Billing",
+        "address_line1": address1 + " " + address2,
+        "address_line2": address3 + " " + address4,
+        "city": customer['city'] if 'city' in customer else "",
+        "state": customer['state'] if 'state' in customer else "",
+        "country": customer['country'] if 'country' in customer else "",
+        "pincode": customer['pincode'] if 'pincode' in customer else "",
+        # "phone": customer['customer_code'],
+        "gstin": customer['partygstin'] if 'partygstin' in customer else "",
+        "gst_state": customer['state'] if 'state' in customer else "",
+        "gst_state_number": customer['state_code'] if 'state_code' in customer else "",
+        "tax_category": customer['tax_category'] if 'tax_category' in customer else "",
+        "is_primary_address": 1,
+        "is_shipping_address": 1,
+        "doctype": "Address",
+        "links": [
+            {
+                "parent": cus_name+"-Billing",
+                "parentfield": "links",
+                "parenttype": "Address",
+                "link_doctype": doctype,
+                "link_name": cus_name,
+                "link_title": cus_name,
+                "doctype": "Dynamic Link"
+            }
+        ]
+    }
+    # print(req)
+    doc = frappe.get_doc(req)
+    doc.insert()
 
-        print('Success- Address') # return {'name': customer['customer_code'], 'tally_object': 'Ledger_Address', 'message': 'Success'}
-    except Exception as e:
-        print(str(e))
-        # return {'name': customer['customer_code'], 'tally_object': 'Ledger_Address', 'message': str(e)}
+    print('Success- Address') # return {'name': customer['customer_code'], 'tally_object': 'Ledger_Address', 'message': 'Success'}
 
 
 
