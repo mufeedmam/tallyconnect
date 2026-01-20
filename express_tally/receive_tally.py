@@ -11,6 +11,8 @@ def customer_group():
     tally_response = []
 
     for group in groups:
+        if 'doctype' not in group:
+            group['doctype'] = 'Customer Group'
         group_exists = frappe.db.exists(
             group['doctype'], group['customer_group_name'])
         if not group_exists:
@@ -50,6 +52,8 @@ def supplier_group():
     tally_response = []
 
     for group in groups:
+        if 'doctype' not in group:
+            group['doctype'] = 'Supplier Group'
         group_exists = frappe.db.exists(
             group['doctype'], group['supplier_group_name'])
         if not group_exists:
@@ -89,6 +93,8 @@ def item_group():
     tally_response = []
 
     for stockgroup in stockgroups:
+        if 'doctype' not in stockgroup:
+            stockgroup['doctype'] = 'Item Group'
         group_exists = frappe.db.exists(
             stockgroup['doctype'], stockgroup['item_group_name'])
         if not group_exists:
@@ -128,6 +134,8 @@ def warehouse():
     tally_response = []
 
     for warehouse in warehouses:
+        if 'doctype' not in warehouse:
+            warehouse['doctype'] = 'Warehouse'
         is_exists = frappe.db.exists(
             warehouse['doctype'], warehouse['warehouse_name'])
         if not is_exists:
@@ -168,6 +176,11 @@ def customer():
     tally_response = []
 
     for customer in customers:
+        if 'doctype' not in customer:
+            customer['doctype'] = 'Customer'
+        if 'customer_code' not in customer and 'name' in customer:
+            customer['customer_code'] = customer['name']
+
         is_exists = frappe.db.exists(
             customer['doctype'], customer['customer_code'])
         if not is_exists:
@@ -369,6 +382,14 @@ def supplier():
     tally_response = []
 
     for supplier in suppliers:
+        if 'doctype' not in supplier:
+            supplier['doctype'] = 'Supplier'
+        if 'customer_code' not in supplier:
+             if 'supplier_name' in supplier:
+                 supplier['customer_code'] = supplier['supplier_name']
+             elif 'name' in supplier:
+                 supplier['customer_code'] = supplier['name']
+
         is_exists = frappe.db.exists(
             supplier['doctype'], supplier['customer_code'])
         if not is_exists:
@@ -417,6 +438,8 @@ def account():
     tally_response = []
 
     for account in accounts:
+        if 'doctype' not in account:
+            account['doctype'] = 'Account'
         is_exists = frappe.db.exists(
             account['doctype'], account['account_name'])
         if not is_exists:
@@ -576,6 +599,8 @@ def uom():
     tally_response = []
 
     for uom in uoms:
+        if 'doctype' not in uom:
+            uom['doctype'] = 'UOM'
         uom_exists = frappe.db.exists(
             uom['doctype'], uom['uom_name'])
         if not uom_exists:
