@@ -6,13 +6,17 @@ import frappe, json
 def customer():
 
     payload = json.loads(frappe.request.data)
+
+    if 'company' not in payload:
+        frappe.throw("Company is required")
+
     customers = frappe.db.get_all(
         'Customer',
-        fields=['name', 'customer_name', 'company', 'customer_primary_address', 'gst_category', 'modified', 'tax_id', 'email_id', 'mobile_no','pan', 'first_name', 'custom_is_tally_synced'],
+        fields=['name', 'customer_name', 'company', 'customer_primary_address', 'gst_category', 'modified', 'tax_id', 'email_id', 'mobile_no','pan', 'first_name'],
         filters={ 
             # 'modified' : ['>', payload['date']],
             'company': payload['company'],
-            'custom_is_tally_synced': ['!=', 'Yes']
+            # 'custom_is_tally_synced': ['!=', 'Yes']
             },
         limit=100
         )
@@ -34,13 +38,17 @@ def customer():
 def supplier():
 
     payload = json.loads(frappe.request.data)
+
+    if 'company' not in payload:
+        frappe.throw("Company is required")
+
     suppliers = frappe.db.get_all(
         'Supplier',
-        fields=['name', 'supplier_name', 'company', 'gst_category', 'modified', 'custom_is_tally_synced'],
+        fields=['name', 'supplier_name', 'company', 'gst_category', 'modified'],
         filters={ 
             # 'modified' : ['>', payload['date']],
             'company': payload['company'],
-            'custom_is_tally_synced': ['!=', 'Yes']
+            # 'custom_is_tally_synced': ['!=', 'Yes']
             },
         limit=100
         )
@@ -79,6 +87,10 @@ def supplier():
 def purchase():
 
     payload = json.loads(frappe.request.data)
+
+    if 'company' not in payload:
+        frappe.throw("Company is required")
+
     purchase_invoices = frappe.db.get_all(
         'Purchase Invoice',
         fields=[
@@ -89,7 +101,8 @@ def purchase():
             # 'modified' : ['>', payload['date']],
             'company': payload['company'],
             'docstatus': 1,
-            'custom_is_tally_synced': ['!=', 'Yes']
+            'docstatus': 1,
+            # 'custom_is_tally_synced': ['!=', 'Yes']
             },
         limit=100
         )
@@ -112,6 +125,10 @@ def purchase():
 def sales():
 
     payload = json.loads(frappe.request.data)
+
+    if 'company' not in payload:
+        frappe.throw("Company is required")
+
     sales_invoices = frappe.db.get_all(
         'Sales Invoice',
         fields=[
@@ -146,6 +163,10 @@ def sales():
 def payments():
 
     payload = json.loads(frappe.request.data)
+
+    if 'company' not in payload:
+        frappe.throw("Company is required")
+
     payments = frappe.db.get_all(
         'Payment Entry',
         fields=[
@@ -188,8 +209,8 @@ def customer_update():
             doctype,
             doc['docname'],
             {
-                "custom_is_tally_synced": 'Yes',
-                "custom_sync_message": "Success"
+                # "custom_is_tally_synced": 'Yes',
+                # "custom_sync_message": "Success"
             }
         )
 
@@ -204,8 +225,8 @@ def update_tally_flag(doc, method):
             doc.doctype,
             doc.name,
             {
-                "custom_is_tally_synced": 'No',
-                "custom_sync_message": ""
+                # "custom_is_tally_synced": 'No',
+                # "custom_sync_message": ""
             }
         )
 

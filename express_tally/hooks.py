@@ -175,95 +175,95 @@ user_data_fields = [
 
 # fixtures = ['Custom Field']
 
-custom_fields = {
-	"Customer": [
-		{
-			"fieldname": "custom_is_tally_synced",
-			"label": "Is Tally Synced",
-			"fieldtype": "Select",
-			"options": "No\nYes",
-			"default": "No",
-			"insert_after": "customer_name",
-			"read_only": 1
-		},
-		{
-			"fieldname": "custom_sync_message",
-			"label": "Tally Sync Message",
-			"fieldtype": "Data",
-			"insert_after": "custom_is_tally_synced",
-			"read_only": 1
-		}
-	],
-	"Supplier": [
-		{
-			"fieldname": "custom_is_tally_synced",
-			"label": "Is Tally Synced",
-			"fieldtype": "Select",
-			"options": "No\nYes",
-			"default": "No",
-			"insert_after": "supplier_name",
-			"read_only": 1
-		},
-		{
-			"fieldname": "custom_sync_message",
-			"label": "Tally Sync Message",
-			"fieldtype": "Data",
-			"insert_after": "custom_is_tally_synced",
-			"read_only": 1
-		}
-	],
-	"Sales Invoice": [
-		{
-			"fieldname": "custom_is_tally_synced",
-			"label": "Is Tally Synced",
-			"fieldtype": "Select",
-			"options": "No\nYes",
-			"default": "No",
-			"insert_after": "customer_name",
-			"read_only": 1
-		},
-		{
-			"fieldname": "custom_sync_message",
-			"label": "Tally Sync Message",
-			"fieldtype": "Data",
-			"insert_after": "custom_is_tally_synced",
-			"read_only": 1
-		}
-	],
-	"Purchase Invoice": [
-		{
-			"fieldname": "custom_is_tally_synced",
-			"label": "Is Tally Synced",
-			"fieldtype": "Select",
-			"options": "No\nYes",
-			"default": "No",
-			"insert_after": "supplier_name",
-			"read_only": 1
-		},
-		{
-			"fieldname": "custom_sync_message",
-			"label": "Tally Sync Message",
-			"fieldtype": "Data",
-			"insert_after": "custom_is_tally_synced",
-			"read_only": 1
-		}
-	],
-	"Payment Entry": [
-		{
-			"fieldname": "custom_is_tally_synced",
-			"label": "Is Tally Synced",
-			"fieldtype": "Select",
-			"options": "No\nYes",
-			"default": "No",
-			"insert_after": "party_name",
-			"read_only": 1
-		},
-		{
-			"fieldname": "custom_sync_message",
-			"label": "Tally Sync Message",
-			"fieldtype": "Data",
-			"insert_after": "custom_is_tally_synced",
-			"read_only": 1
-		}
-	]
-}
+# custom_fields = {
+# 	"Customer": [
+# 		{
+# 			"fieldname": "custom_is_tally_synced",
+# 			"label": "Is Tally Synced",
+# 			"fieldtype": "Select",
+# 			"options": "No\nYes",
+# 			"default": "No",
+# 			"insert_after": "customer_name",
+# 			"read_only": 1
+# 		},
+# 		{
+# 			"fieldname": "custom_sync_message",
+# 			"label": "Tally Sync Message",
+# 			"fieldtype": "Data",
+# 			"insert_after": "custom_is_tally_synced",
+# 			"read_only": 1
+# 		}
+# 	],
+# 	"Supplier": [
+# 		{
+# 			"fieldname": "custom_is_tally_synced",
+# 			"label": "Is Tally Synced",
+# 			"fieldtype": "Select",
+# 			"options": "No\nYes",
+# 			"default": "No",
+# 			"insert_after": "supplier_name",
+# 			"read_only": 1
+# 		},
+# 		{
+# 			"fieldname": "custom_sync_message",
+# 			"label": "Tally Sync Message",
+# 			"fieldtype": "Data",
+# 			"insert_after": "custom_is_tally_synced",
+# 			"read_only": 1
+# 		}
+# 	],
+# 	"Sales Invoice": [
+# 		{
+# 			"fieldname": "custom_is_tally_synced",
+# 			"label": "Is Tally Synced",
+# 			"fieldtype": "Select",
+# 			"options": "No\nYes",
+# 			"default": "No",
+# 			"insert_after": "customer_name",
+# 			"read_only": 1
+# 		},
+# 		{
+# 			"fieldname": "custom_sync_message",
+# 			"label": "Tally Sync Message",
+# 			"fieldtype": "Data",
+# 			"insert_after": "custom_is_tally_synced",
+# 			"read_only": 1
+# 		}
+# 	],
+# 	"Purchase Invoice": [
+# 		{
+# 			"fieldname": "custom_is_tally_synced",
+# 			"label": "Is Tally Synced",
+# 			"fieldtype": "Select",
+# 			"options": "No\nYes",
+# 			"default": "No",
+# 			"insert_after": "supplier_name",
+# 			"read_only": 1
+# 		},
+# 		{
+# 			"fieldname": "custom_sync_message",
+# 			"label": "Tally Sync Message",
+# 			"fieldtype": "Data",
+# 			"insert_after": "custom_is_tally_synced",
+# 			"read_only": 1
+# 		}
+# 	],
+# 	"Payment Entry": [
+# 		{
+# 			"fieldname": "custom_is_tally_synced",
+# 			"label": "Is Tally Synced",
+# 			"fieldtype": "Select",
+# 			"options": "No\nYes",
+# 			"default": "No",
+# 			"insert_after": "party_name",
+# 			"read_only": 1
+# 		},
+# 		{
+# 			"fieldname": "custom_sync_message",
+# 			"label": "Tally Sync Message",
+# 			"fieldtype": "Data",
+# 			"insert_after": "custom_is_tally_synced",
+# 			"read_only": 1
+# 		}
+# 	]
+# }
