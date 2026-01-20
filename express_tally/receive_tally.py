@@ -178,8 +178,11 @@ def customer():
     for customer in customers:
         if 'doctype' not in customer:
             customer['doctype'] = 'Customer'
-        if 'customer_code' not in customer and 'name' in customer:
-            customer['customer_code'] = customer['name']
+        if 'customer_code' not in customer:
+            if 'name' in customer:
+                customer['customer_code'] = customer['name']
+            elif 'customer_name' in customer:
+                customer['customer_code'] = customer['customer_name']
 
         is_exists = frappe.db.exists(
             customer['doctype'], customer['customer_code'])
