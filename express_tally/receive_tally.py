@@ -4,9 +4,16 @@ import frappe
 import json
 
 @frappe.whitelist()
+@frappe.whitelist()
 def customer_group():
-    payload = json.loads(frappe.request.data)
-    groups = payload['data']
+    data = json.loads(frappe.request.data)
+    if not isinstance(data, dict):
+         data = {'data': []}
+         
+    if 'data' in data:
+         groups = data['data']
+    else:
+         groups = [data] if isinstance(data, dict) else data
 
     tally_response = []
 
@@ -45,9 +52,14 @@ def customer_group():
 
 
 @frappe.whitelist()
+@frappe.whitelist()
 def supplier_group():
-    payload = json.loads(frappe.request.data)
-    groups = payload['data']
+    data = json.loads(frappe.request.data)
+    
+    if 'data' in data:
+         groups = data['data']
+    else:
+         groups = [data] if isinstance(data, dict) else data
 
     tally_response = []
 
@@ -86,9 +98,14 @@ def supplier_group():
 
 
 @frappe.whitelist()
+@frappe.whitelist()
 def item_group():
-    payload = json.loads(frappe.request.data)
-    stockgroups = payload['data']
+    data = json.loads(frappe.request.data)
+    
+    if 'data' in data:
+         stockgroups = data['data']
+    else:
+         stockgroups = [data] if isinstance(data, dict) else data
 
     tally_response = []
 
@@ -127,9 +144,14 @@ def item_group():
 
 
 @frappe.whitelist()
+@frappe.whitelist()
 def warehouse():
-    payload = json.loads(frappe.request.data)
-    warehouses = payload['data']
+    data = json.loads(frappe.request.data)
+    
+    if 'data' in data:
+         warehouses = data['data']
+    else:
+         warehouses = [data] if isinstance(data, dict) else data
 
     tally_response = []
 
@@ -169,9 +191,14 @@ def warehouse():
 
 
 @frappe.whitelist()
+@frappe.whitelist()
 def customer():
-    payload = json.loads(frappe.request.data)
-    customers = payload['data']
+    data = json.loads(frappe.request.data)
+    
+    if 'data' in data:
+         customers = data['data']
+    else:
+         customers = [data] if isinstance(data, dict) else data
 
     tally_response = []
 
@@ -378,9 +405,14 @@ def supplier_opening():
 
 
 @frappe.whitelist()
+@frappe.whitelist()
 def supplier():
-    payload = json.loads(frappe.request.data)
-    suppliers = payload['data']
+    data = json.loads(frappe.request.data)
+    
+    if 'data' in data:
+         suppliers = data['data']
+    else:
+         suppliers = [data] if isinstance(data, dict) else data
 
     tally_response = []
 
@@ -434,9 +466,14 @@ def supplier():
     return {"status": True, 'data': tally_response}    
 
 @frappe.whitelist()
+@frappe.whitelist()
 def account():
-    payload = json.loads(frappe.request.data)
-    accounts = payload['data']
+    data = json.loads(frappe.request.data)
+    
+    if 'data' in data:
+         accounts = data['data']
+    else:
+         accounts = [data] if isinstance(data, dict) else data
 
     tally_response = []
 
@@ -483,9 +520,9 @@ def create_account(customer):
         "account_type": account_type
     }
 
-    # print(req)
-    doc = frappe.get_doc(req)
-    doc.insert()
+    if not frappe.db.exists("Account", {"account_name": cus_name, "company": customer['company']}):
+        doc = frappe.get_doc(req)
+        doc.insert()
 
     # return {'name': customer['customer_name'], 'tally_object': 'Ledger_Contact', 'message': 'Success'}
     print('Success- Account')
@@ -539,9 +576,9 @@ def create_contact(customer):
         ],
     }
 
-    # print(req)
-    doc = frappe.get_doc(req)
-    doc.insert()
+    if not frappe.db.exists("Contact", customer['ledgercontact']):
+        doc = frappe.get_doc(req)
+        doc.insert()
 
     # return {'name': customer['customer_name'], 'tally_object': 'Ledger_Contact', 'message': 'Success'}
     print('Success- Contact')
@@ -554,9 +591,11 @@ def create_address(customer):
     address4 = customer['address4'] if 'address4' in customer else ""
     doctype = customer['doctype']
     cus_name = customer['customer_code'] if doctype == 'Customer' else customer['supplier_name']
+    
+    name = cus_name+"-Billing"
 
     req = {
-        "name": cus_name+"-Billing",
+        "name": name,
         "address_title": cus_name,
         "address_type": "Billing",
         "address_line1": address1 + " " + address2,
@@ -575,7 +614,7 @@ def create_address(customer):
         "doctype": "Address",
         "links": [
             {
-                "parent": cus_name+"-Billing",
+                "parent": name,
                 "parentfield": "links",
                 "parenttype": "Address",
                 "link_doctype": doctype,
@@ -586,8 +625,9 @@ def create_address(customer):
         ]
     }
     # print(req)
-    doc = frappe.get_doc(req)
-    doc.insert()
+    if not frappe.db.exists("Address", name):
+        doc = frappe.get_doc(req)
+        doc.insert()
 
     print('Success- Address') # return {'name': customer['customer_code'], 'tally_object': 'Ledger_Address', 'message': 'Success'}
 
