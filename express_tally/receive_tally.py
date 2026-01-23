@@ -481,7 +481,7 @@ def account():
         if 'doctype' not in account:
             account['doctype'] = 'Account'
         is_exists = frappe.db.exists(
-            account['doctype'], account['account_name'])
+            account['doctype'], {'account_name': account['account_name'], 'company': account['company']})
         if not is_exists:
             try:
 
