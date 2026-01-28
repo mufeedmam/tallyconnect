@@ -734,21 +734,36 @@ def sanitize_voucher_data(data):
 
     # Sanitize Item details
     if 'items' in data:
-        for item in data['items']:
+        items = data['items']
+        if isinstance(items, dict):
+            items = [items]
+            data['items'] = items # Update back to data so wrapped list persists if needed
+        
+        for item in items:
             for field in numeric_fields:
                 if field in item and item[field] is None:
                     item[field] = 0.0
     
     # Sanitize Tax details
     if 'taxes' in data:
-        for tax in data['taxes']:
+        taxes = data['taxes']
+        if isinstance(taxes, dict):
+            taxes = [taxes]
+            data['taxes'] = taxes
+
+        for tax in taxes:
             for field in tax_numeric_fields:
                 if field in tax and tax[field] is None:
                     tax[field] = 0.0
 
     # Sanitize Journal Account details
     if 'accounts' in data:
-        for account in data['accounts']:
+        accounts = data['accounts']
+        if isinstance(accounts, dict):
+            accounts = [accounts]
+            data['accounts'] = accounts
+
+        for account in accounts:
             for field in ['debit_in_account_currency', 'credit_in_account_currency', 'exchange_rate']:
                 if field in account and account[field] is None:
                     account[field] = 0.0
