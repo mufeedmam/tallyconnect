@@ -713,6 +713,39 @@ def create_hsn(item):
             doc = frappe.get_doc(req)
             doc.insert()
 
+import traceback
+
+def sanitize_voucher_data(data):
+    """
+    Sanitizes voucher data by converting None values to 0.0 for numeric fields.
+    This prevents 'unsupported operand type(s) for -: NoneType and float' errors.
+    """
+    numeric_fields = [
+        'qty', 'stock_qty', 'actual_qty', 'rate', 'base_rate', 
+        'amount', 'base_amount', 'base_price_list_rate', 
+        'discount_percentage', 'price_list_rate', 'conversion_factor'
+    ]
+    
+    tax_numeric_fields = [
+        'tax_amount', 'tax_amount_after_discount_amount', 
+        'base_tax_amount', 'base_tax_amount_after_discount_amount', 
+        'rate', 'base_total'
+    ]
+
+    # Sanitize Item details
+    if 'items' in data:
+        for item in data['items']:
+            for field in numeric_fields:
+                if field in item and item[field] is None:
+                    item[field] = 0.0
+    
+    # Sanitize Tax details
+    if 'taxes' in data:
+        for tax in data['taxes']:
+            for field in tax_numeric_fields:
+                if field in tax and tax[field] is None:
+                    tax[field] = 0.0
+
 @frappe.whitelist()
 def voucher():
     payload = json.loads(frappe.request.data)
@@ -725,6 +758,7 @@ def voucher():
             sale['doctype'], sale['webstatus_docname'])
         if not sales_exists:
             try:
+                sanitize_voucher_data(sale)
                 doc = frappe.get_doc(sale)
                 doc.insert(set_name=sale['tally_voucherno'])
                 # doc.save()
@@ -732,8 +766,13 @@ def voucher():
                 tally_response.append(
                     {'name': sale['tally_masterid'], 'docname': doc.name, 'tally_object': 'voucher', 'message': 'Success'})
             except Exception as e:
+                # Capture full traceback for debugging
+                error_message = "{}: {}".format(str(e), traceback.format_exc())
+                # Truncate if too long for Tally (optional, but good practice if Tally has limits)
+                # But for now, we want to see the error.
                 tally_response.append(
-                    {'name': sale['tally_masterid'], 'tally_object': 'voucher', 'message': str(e)})
+                    {'name': sale['tally_masterid'], 'tally_object': 'voucher', 'message': str(e)}) # Keeping str(e) for Tally display, but could log full error
+                frappe.log_error(title="Tally Voucher Error", message=traceback.format_exc())
         else:
             tally_response.append(
                     {'name': sale['tally_masterid'], 'docname': doc.name, 'tally_object': 'voucher', 'message': 'Already Exists'})
