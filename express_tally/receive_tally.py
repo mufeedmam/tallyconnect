@@ -746,6 +746,13 @@ def sanitize_voucher_data(data):
                 if field in tax and tax[field] is None:
                     tax[field] = 0.0
 
+    # Sanitize Journal Account details
+    if 'accounts' in data:
+        for account in data['accounts']:
+            for field in ['debit_in_account_currency', 'credit_in_account_currency', 'exchange_rate']:
+                if field in account and account[field] is None:
+                    account[field] = 0.0
+
 @frappe.whitelist()
 def voucher():
     payload = json.loads(frappe.request.data)
