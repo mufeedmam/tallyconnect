@@ -782,7 +782,8 @@ def sanitize_voucher_data(data):
         if party_account_name:
             # Filter accounts: Keep if it has party_type OR if account name is NOT the party account name
             # This effectively removes the duplicate "credit" entry for the party
-            data['accounts'] = [acc for acc in accounts if acc.get('party_type') or acc.get('account') != party_account_name]
+            # Using strip() to be safe against trailing spaces
+            data['accounts'] = [acc for acc in accounts if acc.get('party_type') or (acc.get('account') and acc.get('account').strip() != party_account_name.strip())]
 
 @frappe.whitelist()
 def voucher():
