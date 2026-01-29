@@ -768,6 +768,22 @@ def sanitize_voucher_data(data):
                 if field in account and account[field] is None:
                     account[field] = 0.0
 
+        # Filter out duplicate Party Account entries
+        # Tally might send the Party Account in the LedgerEntries loop (as Credit) even though we added it as Debit.
+        # We need to keep the one we explicitly created (with party_type set) and remove the other.
+        
+        party_account_name = None
+        # Find the party account name first
+        for account in accounts:
+            if account.get('party_type') and account.get('account'):
+                party_account_name = account.get('account')
+                break
+        
+        if party_account_name:
+            # Filter accounts: Keep if it has party_type OR if account name is NOT the party account name
+            # This effectively removes the duplicate "credit" entry for the party
+            data['accounts'] = [acc for acc in accounts if acc.get('party_type') or acc.get('account') != party_account_name]
+
 @frappe.whitelist()
 def voucher():
     payload = json.loads(frappe.request.data)
